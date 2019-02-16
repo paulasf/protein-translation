@@ -1,23 +1,28 @@
 def proteins(strand):
     proteins_list = []
-    codons = get_codons(strand)
+    codons = extract_codons(strand)
+    protein = ''
 
-    for codon in codons:
-        proteins_list.append(get_protein(str(codon)))
-
+    try:
+        for codon in codons:
+            protein = get_protein(str(codon))
+            if protein != "STOP":
+                proteins_list.append(protein)
+            else:
+                return proteins_list
+    except KeyError:
+        return proteins_list
     return proteins_list
 
 
-def get_codons(rna_code):
-    begin_index = 0
-    end_index = 3
-    size_code = 3
+def extract_codons(rna_code):
+    index = 0
+    size_codon = 3
     codons = []
 
-    while end_index <= len(rna_code):
-        codons.append(rna_code[begin_index:end_index])
-        begin_index += size_code
-        end_index += size_code
+    while index + size_codon <= len(rna_code):
+        codons.append(rna_code[index:index + size_codon])
+        index += size_codon
     return codons
 
 
@@ -40,4 +45,8 @@ def get_protein(codon):
       'UAG': "STOP",
       'UGA': "STOP"
     }
+
+    if codon not in protein_dictionary:
+        raise KeyError("Unknown key!")
+
     return protein_dictionary[codon]
