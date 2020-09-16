@@ -5,24 +5,18 @@ def proteins(strand):
 
     try:
         for codon in codons:
-            protein = get_protein(str(codon))
-            if protein != "STOP":
-                proteins_list.append(protein)
-            else:
-                return proteins_list
+            protein = get_protein(codon)
+            if protein == "STOP":
+                break
+            proteins_list.append(protein)    
     except KeyError:
-        return proteins_list
+        print('Invalid key')
     return proteins_list
 
 
 def extract_codons(rna_code):
-    index = 0
-    size_codon = 3
-    codons = []
-
-    while index + size_codon <= len(rna_code):
-        codons.append(rna_code[index:index + size_codon])
-        index += size_codon
+    size = 3
+    codons = [rna_code[i:i + size] for i in range(0, len(rna_code), size)]
     return codons
 
 
